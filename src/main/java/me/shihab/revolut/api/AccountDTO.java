@@ -20,21 +20,21 @@ public class AccountDTO {
     @NotNull
     @JsonProperty
     @DecimalMin(value = "0.0")
-    private BigDecimal amount;
+    private BigDecimal balance;
 
 
     public AccountDTO() {
     }
 
-    public AccountDTO(String name, BigDecimal amount) {
+    public AccountDTO(String name, BigDecimal balance) {
         this.name = name;
-        this.amount = amount;
+        this.balance = balance;
     }
 
-    public AccountDTO(long id, String name, BigDecimal amount) {
+    public AccountDTO(long id, String name, BigDecimal balance) {
         this.id = id;
         this.name = name;
-        this.amount = amount;
+        this.balance = balance;
     }
 
     public long getId() {
@@ -53,12 +53,12 @@ public class AccountDTO {
         this.name = name;
     }
 
-    public BigDecimal getAmount() {
-        return amount;
+    public BigDecimal getBalance() {
+        return balance;
     }
 
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
     }
 
     @Override
@@ -66,7 +66,7 @@ public class AccountDTO {
         return "AccountDTO{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", amount=" + amount +
+                ", balance=" + balance +
                 '}';
     }
 }

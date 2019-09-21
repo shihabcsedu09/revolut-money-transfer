@@ -12,7 +12,7 @@ public class AccountMapper {
         AccountDTO accountDTO = new AccountDTO();
         accountDTO.setId(accountEntity.getId());
         accountDTO.setName(accountEntity.getName());
-        accountDTO.setAmount(accountEntity.getAmount());
+        accountDTO.setBalance(accountEntity.getBalance());
         return accountDTO;
     }
 
@@ -20,6 +20,6 @@ public class AccountMapper {
         if (accountDTO == null) {
             return null;
         }
-        return new AccountEntity(accountDTO.getName(), accountDTO.getAmount());
+        return new AccountEntity(accountDTO.getName(), accountDTO.getBalance());
     }
 }

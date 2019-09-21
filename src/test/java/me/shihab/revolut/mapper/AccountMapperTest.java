@@ -26,7 +26,7 @@ class AccountMapperTest {
 
         assertEquals(testAccountEntity.getId(), mappedAccountDTO.getId());
         assertEquals(testAccountEntity.getName(), mappedAccountDTO.getName());
-        assertEquals(testAccountEntity.getAmount(), mappedAccountDTO.getAmount());
+        assertEquals(testAccountEntity.getBalance(), mappedAccountDTO.getBalance());
     }
 
     @Test
@@ -42,7 +42,7 @@ class AccountMapperTest {
         AccountEntity mappedAccountEntity = accountMapper.dtoToEntity(testAccountDto);
 
         assertEquals(testAccountDto.getName(), mappedAccountEntity.getName());
-        assertEquals(testAccountDto.getAmount(), mappedAccountEntity.getAmount());
+        assertEquals(testAccountDto.getBalance(), mappedAccountEntity.getBalance());
     }
 
     @Test

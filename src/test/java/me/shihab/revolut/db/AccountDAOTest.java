@@ -52,7 +52,7 @@ class AccountDAOTest {
         BigDecimal testNewAmount = BigDecimal.valueOf(300.00);
 
         createdAccountEntity.setName(testNewAccountName);
-        createdAccountEntity.setAmount(testNewAmount);
+        createdAccountEntity.setBalance(testNewAmount);
 
         AccountEntity updatedAccountEntity = daoTestExtension.inTransaction(() ->
                 accountDAO.upsert(accountToBeCreated));
@@ -68,7 +68,7 @@ class AccountDAOTest {
 
         daoTestExtension.inTransaction(() -> accountDAO.upsert(testAccountToBeCreated));
 
-        testAccountToBeCreated.setAmount(BigDecimal.valueOf(300.00));
+        testAccountToBeCreated.setBalance(BigDecimal.valueOf(300.00));
         try {
             daoTestExtension.inTransaction(() -> {
                 accountDAO.upsert(testAccountToBeCreated);
@@ -78,7 +78,7 @@ class AccountDAOTest {
         } catch (PersistenceException ignoredException) {
             final AccountEntity sameAccountEntity = accountDAO.findById(testAccountToBeCreated.getId());
             assertThat(sameAccountEntity.getName()).isEqualTo(testAccountNameToBeCreated);
-            assertThat(sameAccountEntity.getAmount()).isEqualByComparingTo(testAmount);
+            assertThat(sameAccountEntity.getBalance()).isEqualByComparingTo(testAmount);
         }
     }
 

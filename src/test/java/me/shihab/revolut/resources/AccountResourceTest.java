@@ -76,7 +76,7 @@ class AccountResourceTest {
         AccountDTO accountCreated = new AccountDTO();
         accountCreated.setId(123);
         accountCreated.setName(testAccountDTO.getName());
-        accountCreated.setAmount(testAccountDTO.getAmount());
+        accountCreated.setBalance(testAccountDTO.getBalance());
 
         when(accountService.create(any(AccountDTO.class))).thenReturn(accountCreated);
 

@@ -22,8 +22,8 @@ public class AccountEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "amount", nullable = false, precision = 19, scale = 4)
-    private BigDecimal amount;
+    @Column(name = "balance", nullable = false, precision = 19, scale = 4)
+    private BigDecimal balance;
 
     @Version
     private long version;
@@ -31,9 +31,9 @@ public class AccountEntity {
     public AccountEntity() {
     }
 
-    public AccountEntity(String name, BigDecimal amount) {
+    public AccountEntity(String name, BigDecimal balance) {
         this.name = name;
-        this.amount = amount;
+        this.balance = balance;
     }
 
     public long getId() {
@@ -52,12 +52,12 @@ public class AccountEntity {
         this.name = name;
     }
 
-    public BigDecimal getAmount() {
-        return amount;
+    public BigDecimal getBalance() {
+        return balance;
     }
 
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
     }
 
     private long getVersion() {
@@ -76,12 +76,12 @@ public class AccountEntity {
         return getId() == accountEntity.getId() &&
                 getVersion() == accountEntity.getVersion() &&
                 Objects.equals(getName(), accountEntity.getName()) &&
-                Objects.equals(getAmount(), accountEntity.getAmount());
+                Objects.equals(getBalance(), accountEntity.getBalance());
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(getId(), getName(), getAmount(), getVersion());
+        return Objects.hash(getId(), getName(), getBalance(), getVersion());
     }
 }
