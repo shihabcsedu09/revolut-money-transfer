@@ -9,7 +9,7 @@ public class FailureResponse {
         this.message = message;
     }
 
-    int getStatusCode() {
+    public int getStatusCode() {
         return statusCode;
     }
 
@@ -17,7 +17,7 @@ public class FailureResponse {
         this.statusCode = statusCode;
     }
 
-    String getMessage() {
+    public String getMessage() {
         return message;
     }
 
