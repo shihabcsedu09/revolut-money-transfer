@@ -1,28 +1,14 @@
-#database:
-#  properties:
-#    hibernate.dialect: org.hibernate.dialect.H2Dialect
-#    hibernate.show_sql: true
-#    hibernate.generate_statistics: false
-#    hibernate.hbm2ddl.auto: create
-#  driverClass: org.h2.Driver
-#  user: sa
-#  password: sa
-#  url: jdbc:h2:./target/revolut
-
-
 database:
-    properties:
-      hibernate.dialect: org.hibernate.dialect.MySQL5Dialect
-      hibernate.show_sql: true
-      hibernate.generate_statistics: false
-      hibernate.hbm2ddl.auto: create
-    driverClass: com.mysql.jdbc.Driver
-    # the username
-    user: root
-    # the password
-    password: Infolytx321
-    # the JDBC URL; the database is called DWGettingStarted
-    url: jdbc:mysql://localhost:3306/test
+  properties:
+    hibernate.dialect: org.hibernate.dialect.H2Dialect
+    hibernate.show_sql: true
+    hibernate.generate_statistics: false
+    hibernate.hbm2ddl.auto: create
+  driverClass: org.h2.Driver
+  user: sa
+  password: sa
+  url: jdbc:h2:./target/revolut
+
 
 server:
   applicationConnectors:
