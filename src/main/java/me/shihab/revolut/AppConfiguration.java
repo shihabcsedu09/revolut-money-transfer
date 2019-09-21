@@ -1,7 +1,20 @@
 package me.shihab.revolut;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.Configuration;
+import io.dropwizard.db.DataSourceFactory;
 
-public class AppConfiguration extends Configuration {
-    // TODO: implement service configuration
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
+class AppConfiguration extends Configuration {
+    @NotNull
+    @Valid
+    private DataSourceFactory dataSourceFactory
+            = new DataSourceFactory();
+
+    @JsonProperty("database")
+    DataSourceFactory getDataSourceFactory() {
+        return dataSourceFactory;
+    }
 }

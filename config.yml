@@ -1,0 +1,66 @@
+#database:
+#  properties:
+#    hibernate.dialect: org.hibernate.dialect.H2Dialect
+#    hibernate.show_sql: true
+#    hibernate.generate_statistics: false
+#    hibernate.hbm2ddl.auto: create
+#  driverClass: org.h2.Driver
+#  user: sa
+#  password: sa
+#  url: jdbc:h2:./target/revolut
+
+
+database:
+    properties:
+      hibernate.dialect: org.hibernate.dialect.MySQL5Dialect
+      hibernate.show_sql: true
+      hibernate.generate_statistics: false
+      hibernate.hbm2ddl.auto: create
+    driverClass: com.mysql.jdbc.Driver
+    # the username
+    user: root
+    # the password
+    password: Infolytx321
+    # the JDBC URL; the database is called DWGettingStarted
+    url: jdbc:mysql://localhost:3306/test
+
+server:
+  applicationConnectors:
+    - type: http
+      port: 8080
+
+  adminConnectors:
+    - type: http
+      port: 8081
+
+
+# Logging settings.
+logging:
+
+  # The default level of all loggers. Can be OFF, ERROR, WARN, INFO, DEBUG, TRACE, or ALL.
+  level: INFO
+
+  # Logger-specific levels.
+  loggers:
+
+    # Sets the level for 'com.example.app' to DEBUG.
+    me.shihab.revolut: INFO
+
+    # Redirects SQL logs to a separate file
+    org.hibernate.SQL:
+      level: DEBUG
+
+# Logback's Time Based Rolling Policy - archivedLogFilenamePattern: /tmp/application-%d{yyyy-MM-dd}.log.gz
+# Logback's Size and Time Based Rolling Policy -  archivedLogFilenamePattern: /tmp/application-%d{yyyy-MM-dd}-%i.log.gz
+# Logback's Fixed Window Rolling Policy -  archivedLogFilenamePattern: /tmp/application-%i.log.gz
+
+  appenders:
+    - type: console
+    - type: file
+      threshold: INFO
+      logFormat: "%-6level [%d{HH:mm:ss.SSS}] [%t] %logger{5} - %X{code} %msg %n"
+      currentLogFilename: /tmp/application.log
+      archivedLogFilenamePattern: /tmp/application-%d{yyyy-MM-dd}-%i.log.gz
+      archivedFileCount: 7
+      timeZone: UTC
+      maxFileSize: 10MiB
