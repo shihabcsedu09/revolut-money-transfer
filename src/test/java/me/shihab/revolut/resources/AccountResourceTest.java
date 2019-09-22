@@ -88,7 +88,6 @@ class AccountResourceTest {
         assertThat(response.readEntity(AccountDTO.class)).isEqualToComparingFieldByField(accountCreated);
     }
 
-    @SuppressWarnings("unchecked")
     @Test
     void getAccount_IfExceptionOccurredDuringAccountCreation_ShouldRespondWithCorrectStatusCode() {
         AccountDTO testAccountDTO = getTestAccountDTO();
