@@ -7,7 +7,6 @@ import org.hibernate.annotations.SelectBeforeUpdate;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.Objects;
 
 @Entity
 @Table(name = "account")
@@ -40,10 +39,6 @@ public class AccountEntity {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
     }
@@ -60,28 +55,13 @@ public class AccountEntity {
         this.balance = balance;
     }
 
-    private long getVersion() {
-        return version;
-    }
-
-    public void setVersion(long version) {
-        this.version = version;
-    }
-
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof AccountEntity)) return false;
-        AccountEntity accountEntity = (AccountEntity) o;
-        return getId() == accountEntity.getId() &&
-                getVersion() == accountEntity.getVersion() &&
-                Objects.equals(getName(), accountEntity.getName()) &&
-                Objects.equals(getBalance(), accountEntity.getBalance());
-    }
-
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(getId(), getName(), getBalance(), getVersion());
+    public String toString() {
+        return "AccountEntity{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", balance=" + balance +
+                ", version=" + version +
+                '}';
     }
 }
