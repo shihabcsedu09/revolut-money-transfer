@@ -24,7 +24,7 @@ public class AccountDTOTest {
     }
 
     @Test
-    public void serializesToJSON() throws Exception {
+    public void correctlySerializesToJSON() throws Exception {
         AccountDTO deserializedAccountDTOFromJson = MAPPER.readValue(fixture("fixtures/AccountDTO.json"), AccountDTO.class);
         final String expectedJsonString = MAPPER.writeValueAsString(deserializedAccountDTOFromJson);
         final String actualSerializedJsonString = MAPPER.writeValueAsString(testAccountDto);
@@ -32,7 +32,7 @@ public class AccountDTOTest {
     }
 
     @Test
-    public void deserializesFromJSON() throws Exception {
+    public void correctlyDeserializesFromJSON() throws Exception {
         AccountDTO deserializedAccountDTOFromJson = MAPPER.readValue(fixture("fixtures/AccountDTO.json"), AccountDTO.class);
         assertThat(deserializedAccountDTOFromJson)
                 .isEqualToComparingFieldByField(testAccountDto);
