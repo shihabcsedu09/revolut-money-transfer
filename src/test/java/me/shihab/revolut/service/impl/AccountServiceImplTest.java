@@ -3,6 +3,8 @@ package me.shihab.revolut.service.impl;
 import me.shihab.revolut.api.AccountDTO;
 import me.shihab.revolut.core.AccountEntity;
 import me.shihab.revolut.db.AccountDAO;
+import me.shihab.revolut.exception.FailureMessage;
+import me.shihab.revolut.exception.FailureStatusCode;
 import me.shihab.revolut.exception.RuntimeException;
 import me.shihab.revolut.mapper.AccountMapper;
 import me.shihab.revolut.service.AccountService;
@@ -40,7 +42,6 @@ class AccountServiceImplTest {
 
         AccountEntity testAccountEntityToBeCreated = new AccountEntity(testAccountName, testAmount);
         AccountEntity testAccountEntityCreated = new AccountEntity(testAccountName, testAmount);
-        testAccountEntityCreated.setId(testAccountId);
 
         when(accountMapper.dtoToEntity(testAccountDTO)).thenReturn(testAccountEntityToBeCreated);
         when(accountDao.upsert(testAccountEntityToBeCreated)).thenReturn(testAccountEntityCreated);
@@ -50,11 +51,14 @@ class AccountServiceImplTest {
     }
 
     @Test
-    void get_GivenNonExistingAccountId_ShouldThrowRuntimeException() {
+    void get_GivenNonExistingAccountId_ShouldThrowAccountNotFoundException() {
         long testAccountId = 123;
         when(accountDao.findById(testAccountId)).thenReturn(null);
 
-        assertThrows(RuntimeException.class, () -> accountService.get(testAccountId));
+        RuntimeException accountNotFoundException = assertThrows(RuntimeException.class, () -> accountService.get(testAccountId));
+
+        assertEquals(FailureStatusCode.ACCOUNT_NOT_FOUND.statusCode(), accountNotFoundException.getFailureResponse().getStatusCode());
+        assertEquals(FailureMessage.ACCOUNT_NOT_FOUND.message(), accountNotFoundException.getFailureResponse().getMessage());
     }
 
     @Test
@@ -65,7 +69,6 @@ class AccountServiceImplTest {
 
         AccountDTO testAccountDTO = new AccountDTO(testAccountId, testAccountName, testAmount);
         AccountEntity testAccountEntity = new AccountEntity(testAccountName, testAmount);
-        testAccountEntity.setId(testAccountId);
 
         when(accountDao.findById(testAccountId)).thenReturn(testAccountEntity);
         when(accountMapper.entityToDto(testAccountEntity)).thenReturn(testAccountDTO);
