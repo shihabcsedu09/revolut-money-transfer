@@ -20,8 +20,14 @@ class AccountDAOTest {
 
     private AccountDAO accountDAO = new AccountDAO(daoTestExtension.getSessionFactory());
 
+    private AccountEntity getTestAccountEntity() {
+        String testAccountName = "Test 1";
+        BigDecimal testBalance = BigDecimal.valueOf(100.00);
+        return new AccountEntity(testAccountName, testBalance);
+    }
+
     @Test
-    void extensionCreatedSessionFactory() {
+    void extensionCreatedSessionFactory_isNotNull() {
         final SessionFactory sessionFactory = daoTestExtension.getSessionFactory();
 
         assertThat(sessionFactory).isNotNull();
@@ -29,9 +35,7 @@ class AccountDAOTest {
 
     @Test
     void upsert_ShouldReturnNewlyCreatedAccountEntity() {
-        String testAccountName = "Test 1";
-        BigDecimal testAmount = BigDecimal.valueOf(100.00);
-        AccountEntity testAccountToBeCreated = new AccountEntity(testAccountName, testAmount);
+        AccountEntity testAccountToBeCreated = getTestAccountEntity();
 
         AccountEntity createdAccount = daoTestExtension.inTransaction(() ->
                 accountDAO.upsert(testAccountToBeCreated));
@@ -41,9 +45,7 @@ class AccountDAOTest {
 
     @Test
     void upsert_ShouldUpdateAccountEntityCorrectly() {
-        String testAccountNameToBeCreated = "Test 2";
-        BigDecimal testAmount = BigDecimal.valueOf(200.00);
-        AccountEntity accountToBeCreated = new AccountEntity(testAccountNameToBeCreated, testAmount);
+        AccountEntity accountToBeCreated = getTestAccountEntity();
 
         AccountEntity createdAccountEntity = daoTestExtension.inTransaction(() ->
                 accountDAO.upsert(accountToBeCreated));
@@ -55,38 +57,36 @@ class AccountDAOTest {
         createdAccountEntity.setBalance(testNewAmount);
 
         AccountEntity updatedAccountEntity = daoTestExtension.inTransaction(() ->
-                accountDAO.upsert(accountToBeCreated));
+                accountDAO.upsert(createdAccountEntity));
 
-        assertThat(updatedAccountEntity).isEqualToComparingFieldByField(accountToBeCreated);
+        assertThat(updatedAccountEntity).isEqualToComparingFieldByField(createdAccountEntity);
     }
 
     @Test
     void upsert_IfExceptionOccurred_RollBacksSuccessfully() {
-        String testAccountNameToBeCreated = "Test 3";
-        BigDecimal testAmount = BigDecimal.valueOf(200.00);
-        final AccountEntity testAccountToBeCreated = new AccountEntity(testAccountNameToBeCreated, testAmount);
+        String testAccountName = "Test 1";
+        BigDecimal testBalance = BigDecimal.valueOf(100.00);
+        AccountEntity accountToBeCreated = new AccountEntity(testAccountName, testBalance);
 
-        daoTestExtension.inTransaction(() -> accountDAO.upsert(testAccountToBeCreated));
+        daoTestExtension.inTransaction(() -> accountDAO.upsert(accountToBeCreated));
 
-        testAccountToBeCreated.setBalance(BigDecimal.valueOf(300.00));
+        accountToBeCreated.setBalance(BigDecimal.valueOf(300.00));
         try {
             daoTestExtension.inTransaction(() -> {
-                accountDAO.upsert(testAccountToBeCreated);
+                accountDAO.upsert(accountToBeCreated);
                 accountDAO.upsert(new AccountEntity(null, null));
             });
             failBecauseExceptionWasNotThrown(PersistenceException.class);
         } catch (PersistenceException ignoredException) {
-            final AccountEntity sameAccountEntity = accountDAO.findById(testAccountToBeCreated.getId());
-            assertThat(sameAccountEntity.getName()).isEqualTo(testAccountNameToBeCreated);
-            assertThat(sameAccountEntity.getBalance()).isEqualByComparingTo(testAmount);
+            final AccountEntity sameAccountEntity = accountDAO.findById(accountToBeCreated.getId());
+            assertThat(sameAccountEntity.getName()).isEqualTo(testAccountName);
+            assertThat(sameAccountEntity.getBalance()).isEqualByComparingTo(testBalance);
         }
     }
 
     @Test
     void findById_GivenValidAccountId_ReturnsCorrectAccount() {
-        String testAccountName = "Test 3";
-        BigDecimal testAmount = BigDecimal.valueOf(200.00);
-        final AccountEntity testAccountToBeCreated = new AccountEntity(testAccountName, testAmount);
+        final AccountEntity testAccountToBeCreated = getTestAccountEntity();
 
         daoTestExtension.inTransaction(() -> accountDAO.upsert(testAccountToBeCreated));
 
@@ -98,8 +98,8 @@ class AccountDAOTest {
     @Test
     void findById_GivenInvalidAccountId_ReturnsNull() {
         String testAccountName = "Test 3";
-        BigDecimal testAmount = BigDecimal.valueOf(200.00);
-        final AccountEntity testAccountToBeCreated = new AccountEntity(testAccountName, testAmount);
+        BigDecimal testBalance = BigDecimal.valueOf(200.00);
+        final AccountEntity testAccountToBeCreated = new AccountEntity(testAccountName, testBalance);
 
         daoTestExtension.inTransaction(() -> accountDAO.upsert(testAccountToBeCreated));
 
