@@ -4,6 +4,10 @@ database:
     hibernate.show_sql: true
     hibernate.generate_statistics: false
     hibernate.hbm2ddl.auto: create
+    hibernate.c3p0.min_size: 5
+    hibernate.c3p0.max_size: 20
+    hibernate.c3p0.acquire_increment: 5
+    hibernate.c3p0.timeout: 1800
   driverClass: org.h2.Driver
   user: sa
   password: sa
@@ -20,25 +24,12 @@ server:
       port: 8081
 
 
-# Logging settings.
 logging:
-
-  # The default level of all loggers. Can be OFF, ERROR, WARN, INFO, DEBUG, TRACE, or ALL.
   level: INFO
-
-  # Logger-specific levels.
   loggers:
-
-    # Sets the level for 'com.example.app' to DEBUG.
     me.shihab.revolut: INFO
-
-    # Redirects SQL logs to a separate file
     org.hibernate.SQL:
       level: DEBUG
-
-# Logback's Time Based Rolling Policy - archivedLogFilenamePattern: /tmp/application-%d{yyyy-MM-dd}.log.gz
-# Logback's Size and Time Based Rolling Policy -  archivedLogFilenamePattern: /tmp/application-%d{yyyy-MM-dd}-%i.log.gz
-# Logback's Fixed Window Rolling Policy -  archivedLogFilenamePattern: /tmp/application-%i.log.gz
 
   appenders:
     - type: console
