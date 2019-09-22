@@ -1,5 +1,8 @@
 package me.shihab.revolut.exception;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
@@ -7,6 +10,8 @@ import javax.ws.rs.ext.Provider;
 @Provider
 public class RuntimeException extends Exception implements
         ExceptionMapper<RuntimeException> {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(RuntimeException.class);
 
     private static final long serialVersionUID = 1L;
 
@@ -23,9 +28,13 @@ public class RuntimeException extends Exception implements
 
     @Override
     public Response toResponse(RuntimeException exception) {
+        LOGGER.info(exception.getFailureResponse().getMessage());
         return Response.status(exception.failureResponse.getStatusCode())
                 .entity(exception.failureResponse)
                 .type("application/json").build();
     }
 
+    public FailureResponse getFailureResponse() {
+        return failureResponse;
+    }
 }
