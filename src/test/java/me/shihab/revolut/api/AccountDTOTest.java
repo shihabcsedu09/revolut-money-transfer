@@ -16,6 +16,7 @@ public class AccountDTOTest {
 
     private static AccountDTO testAccountDto;
 
+
     @BeforeClass
     public static void setup() {
         String testName = "Shihab Rahman";

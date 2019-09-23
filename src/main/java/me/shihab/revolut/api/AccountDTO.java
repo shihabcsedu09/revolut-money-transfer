@@ -1,12 +1,15 @@
 package me.shihab.revolut.api;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.Objects;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class AccountDTO {
 
     @JsonProperty
@@ -69,4 +72,15 @@ public class AccountDTO {
                 ", balance=" + balance +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AccountDTO)) return false;
+        AccountDTO that = (AccountDTO) o;
+        return getId() == that.getId() &&
+                Objects.equals(getName(), that.getName()) &&
+                getBalance().compareTo(that.getBalance()) == 0;
+    }
+
 }
