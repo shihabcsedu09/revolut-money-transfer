@@ -10,6 +10,7 @@ import me.shihab.revolut.core.AccountEntity;
 import me.shihab.revolut.core.TransactionEntity;
 import me.shihab.revolut.db.AccountDAO;
 import me.shihab.revolut.db.TransactionDAO;
+import me.shihab.revolut.exception.NotFoundException;
 import me.shihab.revolut.exception.RuntimeException;
 import me.shihab.revolut.exception.UncaughtException;
 import me.shihab.revolut.mapper.AccountMapper;
@@ -62,6 +63,7 @@ public class App extends Application<AppConfiguration> {
         environment.jersey().register(new AccountResource(accountService));
         environment.jersey().register(new TransferResource(transferService));
         environment.jersey().register(new RuntimeException());
+        environment.jersey().register(new NotFoundException());
         environment.jersey().register(new UncaughtException());
     }
 
