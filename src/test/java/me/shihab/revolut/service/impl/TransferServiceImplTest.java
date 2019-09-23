@@ -10,6 +10,7 @@ import me.shihab.revolut.exception.FailureStatusCode;
 import me.shihab.revolut.exception.RuntimeException;
 import me.shihab.revolut.mapper.TransactionMapper;
 import me.shihab.revolut.service.TransferService;
+import org.hibernate.StaleStateException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -110,5 +111,25 @@ class TransferServiceImplTest {
         assertThat(updatedToAccount).isEqualToComparingFieldByField(accountEntityArgCaptor.getAllValues().get(1));
 
         assertThat(testTransactionEntity).isEqualToComparingFieldByField(transactionEntityArgCaptor.getAllValues().get(0));
+    }
+
+    @Test
+    void transfer_GivenStaleStateExceptionThrownInDebitAccount_ShouldThrowCorrectRuntimeException() {
+
+        TransferDTO transferDTO = new TransferDTO(1L, 2L, BigDecimal.valueOf(20));
+
+        AccountEntity fromAccount = new AccountEntity("from account name", BigDecimal.valueOf(50));
+        AccountEntity toAccount = new AccountEntity("to account name", BigDecimal.valueOf(100));
+
+        when(accountDAO.findById(transferDTO.getFromAccountId())).thenReturn(fromAccount);
+        when(accountDAO.findById(transferDTO.getToAccountId())).thenReturn(toAccount);
+        when(accountDAO.upsert(any(AccountEntity.class))).thenThrow(StaleStateException.class);
+
+
+        RuntimeException accountAlreadyUpdatedException = assertThrows(RuntimeException.class,
+                () -> transferService.transfer(transferDTO));
+
+        assertEquals(FailureStatusCode.ACCOUNT_ALREADY_UPDATED.statusCode(), accountAlreadyUpdatedException.getFailureResponse().getStatusCode());
+        assertEquals(FailureMessage.ACCOUNT_ALREADY_UPDATED.message(), accountAlreadyUpdatedException.getFailureResponse().getMessage());
     }
 }
