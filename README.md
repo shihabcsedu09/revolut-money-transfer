@@ -35,10 +35,10 @@ Things you need to have installed to run the test project.
     bash scripts/run.sh
   ```
 - Alternatively you can run the following commands too
-```
-mvn clean package  
-java -jar target/money-transfer-1.0-SNAPSHOT.jar server config.yml
-```
+   ```
+   mvn clean package  
+   java -jar target/money-transfer-1.0-SNAPSHOT.jar server config.yml
+   ```
 - The application is deployed at http://localhost:8080/
 - You can find the test coverage report at `target/site/jacoco/index.html`
 
