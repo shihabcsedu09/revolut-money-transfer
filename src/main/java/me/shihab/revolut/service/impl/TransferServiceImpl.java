@@ -88,11 +88,16 @@ public class TransferServiceImpl implements TransferService {
         }
     }
 
-    private void creditAccount(AccountEntity account, BigDecimal creditAmount) {
-        BigDecimal newBalance = account.getBalance().add(creditAmount);
-        account.setBalance(newBalance);
+    private void creditAccount(AccountEntity account, BigDecimal creditAmount) throws RuntimeException {
+        try {
+            BigDecimal newBalance = account.getBalance().add(creditAmount);
+            account.setBalance(newBalance);
 
-        accountDao.upsert(account);
+            accountDao.upsert(account);
+        } catch (StaleStateException ex) {
+            FailureResponse failureResponse = getFailureResponseForAccountAleadyUpdated();
+            throw new RuntimeException(failureResponse);
+        }
     }
 
     private FailureResponse getFailureResponseForNoSourceAccountException() {

@@ -132,4 +132,25 @@ class TransferServiceImplTest {
         assertEquals(FailureStatusCode.ACCOUNT_ALREADY_UPDATED.statusCode(), accountAlreadyUpdatedException.getFailureResponse().getStatusCode());
         assertEquals(FailureMessage.ACCOUNT_ALREADY_UPDATED.message(), accountAlreadyUpdatedException.getFailureResponse().getMessage());
     }
+
+    @Test
+    void transfer_GivenStaleStateExceptionThrownInCreditAccount_ShouldThrowCorrectRuntimeException() {
+
+        TransferDTO transferDTO = new TransferDTO(1L, 2L, BigDecimal.valueOf(20));
+
+        AccountEntity fromAccount = new AccountEntity("from account name", BigDecimal.valueOf(50));
+        AccountEntity toAccount = new AccountEntity("to account name", BigDecimal.valueOf(100));
+
+        when(accountDAO.findById(transferDTO.getFromAccountId())).thenReturn(fromAccount);
+        when(accountDAO.findById(transferDTO.getToAccountId())).thenReturn(toAccount);
+        when(accountDAO.upsert(fromAccount)).thenReturn(fromAccount);
+        when(accountDAO.upsert(toAccount)).thenThrow(StaleStateException.class);
+
+
+        RuntimeException accountAlreadyUpdatedException = assertThrows(RuntimeException.class,
+                () -> transferService.transfer(transferDTO));
+
+        assertEquals(FailureStatusCode.ACCOUNT_ALREADY_UPDATED.statusCode(), accountAlreadyUpdatedException.getFailureResponse().getStatusCode());
+        assertEquals(FailureMessage.ACCOUNT_ALREADY_UPDATED.message(), accountAlreadyUpdatedException.getFailureResponse().getMessage());
+    }
 }
